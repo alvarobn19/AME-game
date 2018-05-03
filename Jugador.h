@@ -1,5 +1,6 @@
-#include "Infanteria.h"
+#pragma once
 
+#include "Infanteria.h"
 
 class Jugador
 {
@@ -8,7 +9,8 @@ private:
 	Infanteria piezas[10][3];
 public:
 	//métodos
-	Jugador();
-	void crearpieza();
+	void inicio(unsigned char key);
+	void crearpieza(unsigned char key);
 	void destruirpieza(Infanteria miinf);
+	void atacar();
 };

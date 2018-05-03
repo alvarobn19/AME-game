@@ -1,10 +1,7 @@
 #include "Infanteria.h"
 
-Infanteria::Infanteria (unsigned char key, int x, int z)
+Infanteria::Infanteria (unsigned char key, int x, int z): x(x), z(z), xorigen(0), zorigen(0)
 {
-	this->x=x;
-	this->z=z;
-
 	switch (key)
 	{
 	case 's':
@@ -13,6 +10,8 @@ Infanteria::Infanteria (unsigned char key, int x, int z)
 		ataque=10;
 		sanacion=0;
 		coste=5;
+		dañoarea=false;
+		headshot=false;
 		break;
 	case 'm':
 	case 'M':
@@ -20,34 +19,30 @@ Infanteria::Infanteria (unsigned char key, int x, int z)
 		ataque=0;
 		sanacion=5;
 		coste=10;
+		dañoarea=false;
+		headshot=false;
 		break;
 	case 'f':
 	case 'F':
 		vida=20;
-		ataque=20;	//pensar lo del headshot
+		ataque=20;	
 		sanacion=0;
 		coste=20;
+		dañoarea=false;
+		headshot=true;
 		break;
 	case 'l':
 	case 'L':
 		vida=40;
-		ataque=5;	//pensar lo del daño en area
+		ataque=5;	
 		sanacion=0;
 		coste=30;
+		dañoarea=true;
+		headshot=false;
 		break;
 	default:
 		break;
 	}
-}
-
-int Infanteria::GetX()
-{
-	return x;
-}
-
-int Infanteria::GetZ()
-{
-	return z;
 }
 
 void Infanteria::Dibuja()
@@ -62,5 +57,5 @@ void Infanteria::Borra()
 
 void Infanteria::Mueve()
 {
-
+	
 }

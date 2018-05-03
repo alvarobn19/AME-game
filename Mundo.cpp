@@ -13,6 +13,8 @@ void Mundo::Inicializa()
 	x_eje=0.0;
 	y_eje=1.0;
 	z_eje=0.0;
+
+	mijug.inicio('S');
 }
 
 void Mundo::Dibuja()
@@ -31,5 +33,21 @@ void Mundo::Mueve()
 
 void Mundo::Tecla(unsigned char key)
 {
-	
+	switch (key)
+	{
+	case 's':
+	case 'S':
+	case 'm':
+	case 'M':
+	case 'f':
+	case 'F':
+	case 'l':
+	case 'L':
+		mijug.crearpieza(key);
+	case 'a':
+	case 'A':
+		mijug.atacar();
+	default:
+		break;
+	}
 }
