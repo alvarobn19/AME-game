@@ -3,20 +3,21 @@
 class Infanteria
 {
 private:
-	int x, z;
-	int xorigen, zorigen;
+	int x, y;
+	int xorigen, yorigen;
 
-	int vida, ataque, sanacion, coste;
-	bool dañoarea, headshot;
+	int jugador;
+	int vida, coste;
 
 public:
 	//métodos
-	Infanteria(): x(0), z(0), xorigen(0), zorigen(0) {vida=ataque=sanacion=coste=0; dañoarea=headshot=false;}		//no utilizar, necesario para poner el siguiente constructor.
-	Infanteria(unsigned char key, int x, int z);
+	Infanteria(): x(0), y(0), xorigen(0), yorigen(0) {vida=coste=0; jugador=0;}		//no utilizar, necesario para poner el siguiente constructor.
+	Infanteria(int x, int y, int jugador, int vida, int coste);
 	int GetX(){return x;}
-	int GetZ(){return z;}
+	int GetZ(){return y;}
 	int GetCoste(){return coste;}
+	int GetVida(){return vida;}
+	int GetJugador(){return jugador;}
 	void Dibuja();
-	void Borra();
 	void Mueve();
 };
