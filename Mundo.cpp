@@ -4,17 +4,15 @@
 
 void Mundo::Inicializa()
 {
-	x_ojo=0.0;
-	y_ojo=20;
-	z_ojo=5;
-	x_mira=0.0;
-	y_mira=0.0;
+	x_ojo=3.0;
+	y_ojo=5.0;
+	z_ojo=20.0;
+	x_mira=3.0;
+	y_mira=5.0;
 	z_mira=0.0;
 	x_eje=0.0;
 	y_eje=1.0;
 	z_eje=0.0;
-
-	mijug.inicio('S');
 }
 
 void Mundo::Dibuja()
@@ -33,6 +31,8 @@ void Mundo::Mueve()
 
 void Mundo::Tecla(unsigned char key)
 {
+	int x=2, y=5, jugador=2;
+
 	switch (key)
 	{
 	case 's':
@@ -43,11 +43,13 @@ void Mundo::Tecla(unsigned char key)
 	case 'F':
 	case 'l':
 	case 'L':
-		mijug.crearpieza(key);
+		mitab.crearpieza(key, x, y, jugador);
 	case 'a':
 	case 'A':
-		mijug.atacar();
+		mitab.atacar(x, y);
 	default:
 		break;
 	}
+
+	mitab.borrarpiezas();
 }
