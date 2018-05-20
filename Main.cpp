@@ -33,6 +33,7 @@ int main(int argc,char* argv[])
 	glutDisplayFunc(OnDraw);
 	glutTimerFunc(25,OnTimer,0);//le decimos que dentro de 25ms llame 1 vez a la funcion OnTimer()
 	glutKeyboardFunc(OnKeyboardDown);
+	glutMouseFunc(onMouse);
 	
 	//inicialización de los datos de la simulación
 	mundo.Inicializa();
@@ -42,6 +43,7 @@ int main(int argc,char* argv[])
 
 	return 0;   
 }
+
 void OnDraw(void)
 {
 	//Borrado de la pantalla	
@@ -54,10 +56,10 @@ void OnDraw(void)
 	//aqui es donde hay que poner el código de dibujo
 	mundo.Dibuja();		//este método sitúa la vista y dibuja las esferas.
 
-	
 	//no borrar esta linea ni poner nada despues
 	glutSwapBuffers();
 }
+
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
 	//poner aqui el código de teclado
@@ -74,4 +76,13 @@ void OnTimer(int value)
 	//no borrar estas lineas
 	glutTimerFunc(25,OnTimer,0);
 	glutPostRedisplay(); 
+}
+
+void onMouse(int button, int state, int x, int y)
+{
+	if(button== GLUT_LEFT_BUTTON && state ==GLUT_DOWN)
+	{
+		mundo.xtab=x;
+		mundo.ytab=y;
+	}
 }

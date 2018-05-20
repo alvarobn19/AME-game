@@ -1,5 +1,4 @@
 #include "Tablero.h"
-#include "glut.h"
 
 #include "Infanteria.h"
 #include "Soldado.h"
@@ -7,6 +6,9 @@
 #include "Lanzagranadas.h"
 #include "Francotirador.h"
 
+#include <stdlib.h>	//para las funciones de números aleatorios
+#include "glut.h"	//la glut siempre después de stdlib
+#include <time.h>	//para la semilla de srand.
 
 Tablero::Tablero()
 {
@@ -21,12 +23,21 @@ Tablero::Tablero()
 
 	suministros1=100;
 	suministros2=100;
+	turno=1;
 
-	for(int i=3;i<9;i++)
+	for(int i=2;i<8;i++)
 	{
-		crearpieza('s', 4, i, 1);
-		crearpieza('s', 3, i, 2);
+		crearpieza('s', 3, i, 1);
+		crearpieza('s', 2, i, 2);
 	}
+}
+
+Tablero::~Tablero()
+{
+	for(int i=0; i<10; i++)
+		for(int j=0; j<6; j++)
+			if(mat[i][j]!=0)
+				delete mat[i][j];
 }
 
 void Tablero::Dibuja()
@@ -34,11 +45,11 @@ void Tablero::Dibuja()
 	glDisable(GL_LIGHTING);
 	glBegin(GL_POLYGON);
 		glColor3ub(0,0,255);
-		glVertex3f(x1+0.5,y1+0.5,0.0f);
-		glVertex3f(x2+0.5,y2+0.5,0.0f);
+		glVertex3f(x1-0.5,y1-0.5,0.0f);
+		glVertex3f(x2-0.5,y2-0.5,0.0f);
 		glColor3ub(255,0,0);
-		glVertex3f(x3+0.5,y3+0.5,0.0f);
-		glVertex3f(x4+0.5,y4+0.5,0.0f);
+		glVertex3f(x3-0.5,y3-0.5,0.0f);
+		glVertex3f(x4-0.5,y4-0.5,0.0f);
 		glColor3ub(255,255,255);
 	glEnd();
 
@@ -47,16 +58,16 @@ void Tablero::Dibuja()
 	for(float i=1.0f; i<10.0f; i++)
 	{
 		glBegin(GL_LINES);
-			glVertex3f(0.5f,i+0.5,0.1f);
-			glVertex3f(6.5f,i+0.5,0.1f);
+			glVertex3f(-0.5f,i-0.5,0.1f);
+			glVertex3f(5.5f,i-0.5,0.1f);
 		glEnd();
 	}
 
 	for(float i=1.0f; i<6.0f; i++)
 	{
 		glBegin(GL_LINES);
-			glVertex3f(i+0.5,0.5f,0.1f);
-			glVertex3f(i+0.5,10.5f,0.1f);
+			glVertex3f(i-0.5,-0.5f,0.1f);
+			glVertex3f(i-0.5,9.5f,0.1f);
 		glEnd();
 	}
 
@@ -68,11 +79,11 @@ void Tablero::Dibuja()
 				(mat[i][j])->Dibuja();
 }
 
-void Tablero::crearpieza(unsigned char key, int x, int z, int jugador)
+bool Tablero::crearpieza(unsigned char key, int x, int z, int jugador)
 {
 	if(mat[z][x]==0)
 	{
-		if((x>=3 && x<=6)&&(z>=0 && z<=10)&&(jugador==1)&&(suministros1>=0) || (x>=0 && x<=3)&&(z>=0 && z<=10)&&(jugador==2)&&(suministros2>=0))
+		if((x>=3 && x<6)&&(z>=0 && z<10)&&(jugador==1)&&(suministros1>0) || (x>=0 && x<3)&&(z>=0 && z<10)&&(jugador==2)&&(suministros2>0))
 		{
 			switch (key)		//revisar la línea de encima por lo de los suministros
 			{
@@ -112,22 +123,144 @@ void Tablero::crearpieza(unsigned char key, int x, int z, int jugador)
 				suministros1-=(mat[z][x])->GetCoste();
 			else if((mat[z][x])->GetJugador()==2)
 				suministros2-=(mat[z][x])->GetCoste();
+
+			return true;
 		}
 	}
+	return false;
 }
 
-void Tablero::atacar(int x, int y)
+void Tablero::atacar(int x, int y, int jugador)
 {
+	if((x>0 && x<=6)&&(y>0 && y<=10))
 	for(int i=0; i<10; i++)
-		for(int j=0; j<6; j++)
-			if(mat[i][j]!=0)
-			;//	(mat[i][j])->atacar(x, y);		//Llamada dentro de matriz a la función atacar propia de cada clase de infanteria.
+	for(int j=0; j<6; j++)
+		if(mat[i][j]!=0 && (mat[i][j])->GetJugador()==jugador)
+		{	
+			//decidir a que punto ataca (por aquello de la probabilidad de fallo)
+			srand(time(NULL));
+			int num1=rand()%2;
+			if(num1==0)
+				(mat[i][j])->atacar(mat, x, y);
+			else
+			{
+				int num2=rand()%8;
+				switch (num2)
+				{
+				case 0:
+					(mat[i][j])->atacar(mat, x, y+1);
+					break;
+				case 1:
+					(mat[i][j])->atacar(mat, x+1, y+1);
+					break;
+				case 2:
+					(mat[i][j])->atacar(mat, x+1, y);
+					break;
+				case 3:
+					(mat[i][j])->atacar(mat, x+1, y-1);
+					break;
+				case 4:
+					(mat[i][j])->atacar(mat, x, y-1);
+					break;
+				case 5:
+					(mat[i][j])->atacar(mat, x-1, y-1);
+					break;
+				case 6:
+					(mat[i][j])->atacar(mat, x-1, y);
+					break;
+				case 7:
+					(mat[i][j])->atacar(mat, x-1, y+1);
+					break;
+				default:
+					break;
+				}
+			}
+		}
 }
 
 void Tablero::borrarpiezas()
 {
 	for(int i=0; i<10; i++)
 		for(int j=0; j<6; j++)
-			if(mat[i][j]!=0 && ((mat[i][j])->GetVida()==0))
+			if((mat[i][j]!=0) && ((mat[i][j])->GetVida()<=0))
+			{
 				delete mat[i][j];
+				mat[i][j]=0;
+			}
+}
+
+void Tablero::atacarIA(int jugador)
+{
+	int jugenem;
+
+	if(jugador==1)
+		jugenem=2;
+	else
+		jugenem=1;
+
+	int xmin, ymin;
+	int vidamin=500;
+	int vidainstant;
+
+	for(int i=0; i<10; i++)
+	for(int j=0; j<6; j++)
+	if(mat[i][j]!=0 && (mat[i][j])->GetJugador()==jugador)
+	{
+		for(int k=0; k<10; k++)
+		for(int l=0; l<6; l++)
+		if(mat[k][l]!=0 && (mat[k][l])->GetJugador()==jugenem)
+		{
+			vidainstant=(mat[k][l])->GetVida();
+			if(vidainstant<vidamin && vidainstant>0)			//La IA busca la pieza con menos vida del campo enemigo.
+			{
+				vidamin=vidainstant;
+				xmin=l;
+				ymin=k;
+			}
+		}
+
+		srand(time(NULL));
+		int num=rand()%2;
+		if(num==0)
+			(mat[i][j])->atacar(mat, xmin, ymin);	//La IA también puede fallar, pero si falla no le da a nadie, a diferencia del jugador (IA en modo fácil)
+	}
+}
+
+bool Tablero::crearpiezaIA(int jugador)
+{
+	int sum= jugador==1? suministros1: suministros2;
+
+	//La IA elige qué pieza crear y busca un hueco libre para ella.
+	char adalid;
+
+	if(sum>=50)
+		adalid='l';
+	else if(sum>=20)
+		adalid='f';
+	else if(sum>=10)
+		adalid='m';
+	else
+		adalid='s';
+
+	int x=-1, y=-1;
+
+	for(int i=0; i<10 && y==-1; i++)
+	for(int j=0; j<6 && x==-1; j++)
+		if(mat[i][j]==0)
+		{
+			x=j;
+			y=i;
+		}
+
+	bool res=crearpieza(adalid, x, y, jugador);
+
+	return res;
+}
+
+void Tablero::CambiarTurno()
+{
+	if (turno==1)
+		turno=2;
+	else
+		turno=1;
 }

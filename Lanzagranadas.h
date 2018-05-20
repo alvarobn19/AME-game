@@ -1,5 +1,5 @@
 #pragma once
-#include "infanteria.h"
+#include "Infanteria.h"
 
 class Lanzagranadas: public Infanteria
 {
@@ -8,5 +8,8 @@ private:
 public:
 	Lanzagranadas(int x, int z, int jugador): Infanteria(x, z, jugador, 40, 30), dañoarea(5) {}
 	~Lanzagranadas(void);
+
+	void Dibuja();
+	void atacar(Infanteria* mat[10][6], int x, int y);
 };
 
