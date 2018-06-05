@@ -85,7 +85,7 @@ bool Tablero::crearpieza(unsigned char key, int x, int z, int jugador)
 	{
 		if((x>=3 && x<6)&&(z>=0 && z<10)&&(jugador==1)&&(suministros1>0) || (x>=0 && x<3)&&(z>=0 && z<10)&&(jugador==2)&&(suministros2>0))
 		{
-			switch (key)		//revisar la línea de encima por lo de los suministros
+			switch (key)
 			{
 			case 's':
 			case 'S':
@@ -132,7 +132,7 @@ bool Tablero::crearpieza(unsigned char key, int x, int z, int jugador)
 
 void Tablero::atacar(int x, int y, int jugador)
 {
-	if((x>0 && x<=6)&&(y>0 && y<=10))
+	if((x>=0 && x<6)&&(y>=0 && y<10))
 	for(int i=0; i<10; i++)
 	for(int j=0; j<6; j++)
 		if(mat[i][j]!=0 && (mat[i][j])->GetJugador()==jugador)
@@ -263,4 +263,32 @@ void Tablero::CambiarTurno()
 		turno=2;
 	else
 		turno=1;
+
+	suministros1+=10;
+	suministros2+=10;
+}
+
+int Tablero::CondicionesDeVictoria()
+{
+	int haypieza1=0, haypieza2=0;
+	int ganador=0;
+
+	for(int i=0; i<10; i++)
+	for(int j=0; j<6; j++)
+		if(mat[i][j]!=0) 
+			if(mat[i][j]->GetJugador()==1)
+				haypieza1=1;
+			else if(mat[i][j]->GetJugador()==2)
+				haypieza2=1;
+
+	if(haypieza1==haypieza2==1)
+		ganador=0;		//continúa el juego
+	else if(haypieza1==haypieza2==0)
+		ganador=3;		//empate
+	else if(haypieza1==1 && haypieza2==0)
+		ganador=1;		//gana el jugador 1
+	else if(haypieza1==0 && haypieza2==1)
+		ganador=2;		//gana el jugador 2
+
+	return ganador;
 }

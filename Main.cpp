@@ -1,9 +1,9 @@
-#include "glut.h"
+//#include <iostream>
 #include <math.h>
-#include "Mundo.h"
+#include "Primera.h"
+#include "glut.h"
 
-
-Mundo mundo;
+Primera prim;
 
 //los callback, funciones que seran llamadas automaticamente por la glut cuando sucedan eventos.
 //NO HACE FALTA LLAMARLAS EXPLICITAMENTE
@@ -36,7 +36,6 @@ int main(int argc,char* argv[])
 	glutMouseFunc(onMouse);
 	
 	//inicialización de los datos de la simulación
-	mundo.Inicializa();
 
 	//pasarle el control a GLUT,que llamara a los callbacks
 	glutMainLoop();	
@@ -54,7 +53,7 @@ void OnDraw(void)
 	glLoadIdentity();
 	
 	//aqui es donde hay que poner el código de dibujo
-	mundo.Dibuja();		//este método sitúa la vista y dibuja las esferas.
+	prim.dibuja();		//este método sitúa la vista y dibuja el mundo
 
 	//no borrar esta linea ni poner nada despues
 	glutSwapBuffers();
@@ -63,7 +62,7 @@ void OnDraw(void)
 void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 {
 	//poner aqui el código de teclado
-	mundo.Tecla(key);
+	prim.tecla(key);
 
 	glutPostRedisplay();
 }
@@ -71,7 +70,6 @@ void OnKeyboardDown(unsigned char key, int x_t, int y_t)
 void OnTimer(int value)
 {
 	//poner aqui el código de animacion
-	mundo.Mueve();
 	
 	//no borrar estas lineas
 	glutTimerFunc(25,OnTimer,0);
@@ -80,9 +78,13 @@ void OnTimer(int value)
 
 void onMouse(int button, int state, int x, int y)
 {
-	if(button== GLUT_LEFT_BUTTON && state ==GLUT_DOWN)
+	if(button==GLUT_LEFT_BUTTON && state==GLUT_DOWN)
 	{
-		mundo.xtab=x;
-		mundo.ytab=y;
+		for(int i=9; i>=0; i--)
+			if(y>=93+i*41 && y<=93+(i+1)*41)
+				prim.mundo.ytab=9-i;
+		for(int i=0; i<6; i++)
+			if(x>=298+i*41 && x<=298+(i+1)*41)
+				prim.mundo.xtab=i;
 	}
 }

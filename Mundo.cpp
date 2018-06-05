@@ -25,15 +25,8 @@ void Mundo::Dibuja()
 	mitab.Dibuja();
 }
 
-void Mundo::Mueve()
+int Mundo::Tecla(unsigned char key)
 {
-
-}
-
-void Mundo::Tecla(unsigned char key)
-{
-	int jugador=2;
-
 	switch (key)
 	{
 	case 's':
@@ -44,11 +37,11 @@ void Mundo::Tecla(unsigned char key)
 	case 'F':
 	case 'l':
 	case 'L':
-		mitab.crearpieza(key, xtab, ytab, jugador);
+		mitab.crearpieza(key, xtab, ytab, mitab.getTurno());
 		break;
 	case 'a':
 	case 'A':
-		mitab.atacar(xtab, ytab, jugador);
+		mitab.atacar(xtab, ytab, mitab.getTurno());
 		break;
 	default:
 		break;
@@ -56,4 +49,7 @@ void Mundo::Tecla(unsigned char key)
 
 	mitab.borrarpiezas();
 	mitab.CambiarTurno();
+
+	int ret=mitab.CondicionesDeVictoria();
+	return ret;
 }

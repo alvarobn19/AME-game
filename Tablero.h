@@ -21,5 +21,6 @@ public:
 	void atacarIA(int jugador);
 	bool crearpiezaIA(int jugador);
 	void CambiarTurno();
-	//int CondicionesDeVictoria();	//devuelve jugador que gana, si devuelve 0 no gana nadie, si devuelve 3 hay empate
+	int getTurno(){return turno;}
+	int CondicionesDeVictoria();	//devuelve jugador que gana, si devuelve 0 no gana nadie, si devuelve 3 hay empate
 };

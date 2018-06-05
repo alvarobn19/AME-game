@@ -9,16 +9,3 @@ Infanteria::Infanteria(int x, int y, int jugador, int vida, int coste): x(x), y(
 		this->coste=coste;
 	}
 }
-
-void Infanteria::Dibuja()
-{
-	glColor3ub(255, 255, 255);
-	glTranslatef(x, y, 0);
-	glutSolidSphere(0.5, 20, 20);
-	glTranslatef(-x, -y, 0);
-}
-
-void Infanteria::Mueve()
-{
-	
-}

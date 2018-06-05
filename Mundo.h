@@ -11,12 +11,13 @@ protected:
 	float x_eje, y_eje, z_eje;
 	Tablero mitab;
 	int xtab, ytab;
+	bool estado;
 public:
 	//métodos:
 	void Inicializa();
 	void Dibuja();
-	void Mueve();
-	void Tecla(unsigned char key);
+	int Tecla(unsigned char key);
+	int getTurno(){return mitab.getTurno();}
 
 	friend void onMouse(int button, int state, int x, int y);
 };

@@ -6,11 +6,21 @@ Medico::~Medico(void)
 
 void Medico::Dibuja()
 {
-	//dibujo del medico.
+	glPushMatrix();
+	glTranslatef(x, y, 0.5);
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	sprite.setState(1, false);
+	sprite.draw();
+
+	glPopMatrix();
+
 }
 
 void Medico::atacar(Infanteria* mat[10][6], int x, int y)
 {
+	ataque();
+
 	//el médico busca al más herido a su alcance y le cura
 	int xcura, ycura;
 	int vidamin=500;
@@ -30,4 +40,9 @@ void Medico::atacar(Infanteria* mat[10][6], int x, int y)
 		}
 
 	mat[ycura][xcura]->SetVida((mat[ycura][xcura]->GetVida())+this->sanacion);
+}
+
+void Medico::ataque()
+{
+	ETSIDI::play("sonidos/ambulancia.mp3");
 }
